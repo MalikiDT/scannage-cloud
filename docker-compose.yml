@@ -1,0 +1,85 @@
+version: "3.9"
+
+services:
+
+  # ── Base de données ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16
+    container_name: scannage_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: scannage
+      POSTGRES_USER: scannage_user
+      POSTGRES_PASSWORD: changez_ce_mot_de_passe
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  # ── Stockage de fichiers ─────────────────────────────────────────
+  minio:
+    image: minio/minio
+    container_name: scannage_minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: scannage_admin
+      MINIO_ROOT_PASSWORD: changez_ce_mot_de_passe
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"   # API fichiers
+      - "9001:9001"   # Interface web MinIO
+
+  # ── File d'attente ───────────────────────────────────────────────
+  redis:
+    image: redis:7
+    container_name: scannage_redis
+    restart: always
+    volumes:
+      - redis_data:/data
+
+  # ── API principale ───────────────────────────────────────────────
+  api:
+    build: ./api
+    container_name: scannage_api
+    restart: always
+    depends_on:
+      - postgres
+      - minio
+      - redis
+    environment:
+      DATABASE_URL: postgresql://scannage_user:changez_ce_mot_de_passe@postgres:5432/scannage
+      MINIO_URL: http://minio:9000
+      MINIO_USER: scannage_admin
+      MINIO_PASSWORD: changez_ce_mot_de_passe
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - ./pipeline_ocr:/app/pipeline_ocr
+    ports:
+      - "8000:8000"   # API accessible sur http://localhost:8000
+
+  # ── Worker OCR (traitement en arrière-plan) ──────────────────────
+  worker:
+    build: ./api
+    container_name: scannage_worker
+    restart: always
+    command: python worker.py
+    depends_on:
+      - postgres
+      - minio
+      - redis
+    environment:
+      DATABASE_URL: postgresql://scannage_user:changez_ce_mot_de_passe@postgres:5432/scannage
+      MINIO_URL: http://minio:9000
+      MINIO_USER: scannage_admin
+      MINIO_PASSWORD: changez_ce_mot_de_passe
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - ./pipeline_ocr:/app/pipeline_ocr
+
+volumes:
+  postgres_data:
+  minio_data:
+  redis_data:
