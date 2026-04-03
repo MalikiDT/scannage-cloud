@@ -3,7 +3,7 @@ import json
 import os
 from datetime import datetime
 
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -41,20 +41,32 @@ def accueil():
 
 # ── Créer un dossier ──────────────────────────────────────────────
 
+# @app.post("/api/v1/dossiers", status_code=201)
+# def creer_dossier(client_nom: str = Form(""), transitaire_nom: str = Form("")):
+#     db = get_db()
+#     cur = db.cursor()
+#     dossier_id = str(uuid.uuid4())
+#     cur.execute(
+#         """INSERT INTO dossiers (id, client_nom, transitaire_nom, statut)
+#            VALUES (%s, %s, %s, 'incomplet')""",
+#         (dossier_id, client_nom, transitaire_nom)
+#     )
+#     db.commit()
+#     cur.close()
+#     db.close()
+#     return {"dossier_id": dossier_id, "statut": "incomplet"}
+
 @app.post("/api/v1/dossiers", status_code=201)
-def creer_dossier(client_nom: str = Form(""), transitaire_nom: str = Form("")):
-    db = get_db()
-    cur = db.cursor()
-    dossier_id = str(uuid.uuid4())
-    cur.execute(
-        """INSERT INTO dossiers (id, client_nom, transitaire_nom, statut)
-           VALUES (%s, %s, %s, 'incomplet')""",
-        (dossier_id, client_nom, transitaire_nom)
-    )
-    db.commit()
-    cur.close()
-    db.close()
-    return {"dossier_id": dossier_id, "statut": "incomplet"}
+async def creer_dossier(request: Request):
+    content_type = request.headers.get("content-type", "")
+    if "application/json" in content_type:
+        body = await request.json()
+        client_nom = body.get("client_nom", "")
+        transitaire_nom = body.get("transitaire_nom", "")
+    else:
+        form = await request.form()
+        client_nom = form.get("client_nom", "")
+        transitaire_nom = form.get("transitaire_nom", "")
 
 
 # ── Consulter un dossier ──────────────────────────────────────────
