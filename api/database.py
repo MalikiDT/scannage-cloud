@@ -1,7 +1,6 @@
 import os
 import psycopg2
 import redis
-from minio import Minio
 
 # ── PostgreSQL ────────────────────────────────────────────────────
 
@@ -9,23 +8,13 @@ def get_db():
     return psycopg2.connect(os.environ["DATABASE_URL"])
 
 
-# ── MinIO (stockage fichiers) ─────────────────────────────────────
+# ── Stockage local (remplace MinIO) ──────────────────────────────
+# Les fichiers sont sauvegardés dans /app/uploads/
 
-def get_minio():
-    url = os.environ["MINIO_URL"].replace("http://", "")
-    return Minio(
-        url,
-        access_key=os.environ["MINIO_USER"],
-        secret_key=os.environ["MINIO_PASSWORD"],
-        secure=False
-    )
+UPLOAD_DIR = "/app/uploads"
 
-BUCKET_NAME = "documents"
-
-def ensure_bucket():
-    client = get_minio()
-    if not client.bucket_exists(BUCKET_NAME):
-        client.make_bucket(BUCKET_NAME)
+def ensure_upload_dir():
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 # ── Redis (file d'attente) ────────────────────────────────────────
