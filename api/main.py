@@ -20,6 +20,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# 🔥 IMPORTANT : tes routes API
+app.include_router(router, prefix="/api/v1")
+
+# 🔥 CRUCIAL : sert le frontend
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
+
 TYPES_VALIDES = {
     "BAD_DAKAR_TERMINAL", "BAD_SHIPPING", "DECLARATION",
     "BILL_OF_LADING", "PROCURATION", "CNI_TRANSITAIRE",
@@ -67,7 +73,6 @@ async def creer_dossier(request: Request):
         form = await request.form()
         client_nom = form.get("client_nom", "")
         transitaire_nom = form.get("transitaire_nom", "")
-
 
 # ── Consulter un dossier ──────────────────────────────────────────
 
