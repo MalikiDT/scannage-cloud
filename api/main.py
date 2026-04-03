@@ -40,9 +40,9 @@ def startup():
 
 # ── Interface web ─────────────────────────────────────────────────
 
-@app.get("/")
-def accueil():
-    return FileResponse("/app/index.html")
+# @app.get("/")
+# def accueil():
+#     return FileResponse("/app/index.html")
 
 
 # ── Créer un dossier ──────────────────────────────────────────────
