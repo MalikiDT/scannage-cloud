@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scannage Cloud — Dossiers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0f0f0e;
+    --bg2:       #171715;
+    --bg3:       #1e1e1b;
+    --border:    #2a2a26;
+    --text:      #e8e4d9;
+    --muted:     #6b6860;
+    --accent:    #c8b97a;
+    --accent2:   #7ac8a8;
+    --danger:    #c87a7a;
+    --mono:      'DM Mono', monospace;
+    --serif:     'Fraunces', Georgia, serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+  }
+  header h1 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  header span {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent2);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ── Layout ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    height: calc(100vh - 65px);
+  }
+
+  /* ── Sidebar ── */
+  aside {
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    overflow-y: auto;
+  }
+  .sidebar-section {
+    padding: 0 20px;
+    margin-bottom: 24px;
+  }
+  .sidebar-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .filter-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .15s;
+    margin-bottom: 2px;
+  }
+  .filter-btn:hover { background: var(--bg3); color: var(--text); }
+  .filter-btn.active { background: var(--bg3); color: var(--accent); }
+  .filter-btn .count {
+    float: right;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .filter-btn.active .count { color: var(--accent); }
+
+  .search-wrap {
+    position: relative;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 8px 10px 8px 30px;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-icon {
+    position: absolute;
+    left: 9px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* ── Main ── */
+  main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .toolbar {
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .toolbar-title {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+  }
+  .toolbar-count {
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: 4px;
+  }
+  .btn-new {
+    margin-left: auto;
+    background: var(--accent);
+    color: #0f0f0e;
+    border: none;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: opacity .15s;
+  }
+  .btn-new:hover { opacity: .85; }
+
+  /* ── Table ── */
+  .table-wrap {
+    flex: 1;
+    overflow-y: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead th {
+    position: sticky; top: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    white-space: nowrap;
+    z-index: 1;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background .1s;
+  }
+  tbody tr:hover { background: var(--bg2); }
+  tbody tr.selected { background: var(--bg3); }
+  td {
+    padding: 12px 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+  .badge-complet    { background: rgba(122,200,168,.15); color: var(--accent2); border: 1px solid rgba(122,200,168,.25); }
+  .badge-traitement { background: rgba(200,185,122,.15); color: var(--accent);  border: 1px solid rgba(200,185,122,.25); }
+  .badge-incomplet  { background: rgba(107,104,96,.12);  color: var(--muted);   border: 1px solid var(--border); }
+  .badge-erreur     { background: rgba(200,122,122,.15); color: var(--danger);  border: 1px solid rgba(200,122,122,.25); }
+
+  .mono-val {
+    font-family: var(--mono);
+    color: var(--text);
+    font-size: 12px;
+  }
+  .mono-null { color: var(--muted); font-style: italic; }
+
+  .client-name { font-size: 13px; }
+  .transit-name { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+  /* ── Panel détail ── */
+  .detail-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 100;
+    backdrop-filter: blur(2px);
+  }
+  .detail-overlay.open { display: flex; justify-content: flex-end; }
+  .detail-panel {
+    background: var(--bg2);
+    border-left: 1px solid var(--border);
+    width: 420px;
+    height: 100%;
+    overflow-y: auto;
+    animation: slideIn .2s ease;
+    padding: 0;
+  }
+  @keyframes slideIn { from{transform:translateX(30px);opacity:0} to{transform:translateX(0);opacity:1} }
+
+  .panel-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .panel-header h2 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 300;
+    font-style: italic;
+    flex: 1;
+  }
+  .close-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color .15s;
+  }
+  .close-btn:hover { color: var(--text); }
+
+  .panel-section {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-section-title {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .field-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+  .field-label { color: var(--muted); font-size: 12px; }
+  .field-value { font-family: var(--mono); font-size: 12px; text-align: right; }
+  .field-value.found { color: var(--accent2); }
+  .field-value.missing { color: var(--muted); font-style: italic; }
+
+  .doc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+  }
+  .doc-icon {
+    width: 28px; height: 28px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .doc-icon-pdf { background: rgba(200,185,122,.15); color: var(--accent); }
+  .doc-name { font-size: 12px; flex: 1; overflow: hidden; text-overflow: ellipsis; }
+  .doc-type { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .doc-score { font-size: 11px; }
+  .score-high { color: var(--accent2); }
+  .score-mid  { color: var(--accent); }
+  .score-low  { color: var(--danger); }
+
+  .edit-field {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 7px 10px;
+    border-radius: 5px;
+    outline: none;
+    margin-top: 4px;
+    transition: border-color .15s;
+  }
+  .edit-field:focus { border-color: var(--accent); }
+  .btn-save {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all .15s;
+  }
+  .btn-save:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Empty state ── */
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: var(--muted);
+    gap: 8px;
+  }
+  .empty-icon { font-size: 32px; opacity: .3; }
+  .empty-text { font-family: var(--serif); font-size: 16px; font-style: italic; font-weight: 300; }
+
+  /* ── Upload modal ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    width: 400px;
+    padding: 24px;
+    animation: slideIn .2s ease;
+  }
+  .modal h3 {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+  .form-group { margin-bottom: 12px; }
+  .form-label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.06em; }
+  .form-input, .form-select {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--accent); }
+  .form-select option { background: var(--bg2); }
+  .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .btn-cancel {
+    flex: 1;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .btn-cancel:hover { border-color: var(--text); color: var(--text); }
+  .btn-submit {
+    flex: 2;
+    background: var(--accent);
+    border: none;
+    color: #0f0f0e;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity .15s;
+  }
+  .btn-submit:hover { opacity: .85; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Scannage Cloud</h1>
+  <span>Dakar Terminal</span>
+  <div class="header-right">
+    <div class="status-dot"></div>
+    <span style="color:var(--muted);font-size:11px">Connecté</span>
+  </div>
+</header>
+
+<div class="layout">
+  <aside>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Recherche</div>
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="search-input" placeholder="N° B/L, client...">
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Statut</div>
+      <button class="filter-btn active" data-filter="tous" onclick="setFilter('tous',this)">
+        Tous <span class="count" id="count-tous">0</span>
+      </button>
+      <button class="filter-btn" data-filter="complet" onclick="setFilter('complet',this)">
+        Complets <span class="count" id="count-complet">0</span>
+      </button>
+      <button class="filter-btn" data-filter="en_traitement" onclick="setFilter('en_traitement',this)">
+        En traitement <span class="count" id="count-en_traitement">0</span>
+      </button>
+      <button class="filter-btn" data-filter="incomplet" onclick="setFilter('incomplet',this)">
+        Incomplets <span class="count" id="count-incomplet">0</span>
+      </button>
+      <button class="filter-btn" data-filter="erreur" onclick="setFilter('erreur',this)">
+        Erreurs <span class="count" id="count-erreur">0</span>
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Actions</div>
+      <button class="filter-btn" onclick="openModal()">+ Nouveau dossier</button>
+      <button class="filter-btn" onclick="chargerDonnees()">↻ Actualiser</button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="toolbar">
+      <span class="toolbar-title">Dossiers</span>
+      <span class="toolbar-count" id="toolbar-count"></span>
+      <button class="btn-new" onclick="openModal()">+ Nouveau dossier</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Client / Transitaire</th>
+            <th>N° B/L</th>
+            <th>N° Déclaration</th>
+            <th>N° Facture</th>
+            <th>Statut</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+      <div class="empty" id="empty-state" style="display:none">
+        <div class="empty-icon">◫</div>
+        <div class="empty-text">Aucun dossier trouvé</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Panel détail -->
+<div class="detail-overlay" id="detail-overlay" onclick="fermerDetail(event)">
+  <div class="detail-panel" id="detail-panel">
+    <div class="panel-header">
+      <h2 id="panel-title">Dossier</h2>
+      <button class="close-btn" onclick="fermerDetailForce()">✕</button>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title">Numéros extraits</div>
+      <div class="field-row">
+        <span class="field-label">N° B/L</span>
+        <span class="field-value" id="p-bl">—</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">N° Déclaration</span>
+        <span class="field-value" id="p-decl">—</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">N° Facture</span>
+        <span class="field-value" id="p-facture">—</span>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title">Documents scannés</div>
+      <div id="p-docs"></div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title">Correction manuelle</div>
+      <div class="form-group">
+        <label class="form-label">N° B/L</label>
+        <input class="edit-field" id="edit-bl" placeholder="ex: 304448001001">
+      </div>
+      <div class="form-group">
+        <label class="form-label">N° Déclaration</label>
+        <input class="edit-field" id="edit-decl" placeholder="ex: 2026 15T 32563">
+      </div>
+      <div class="form-group">
+        <label class="form-label">N° Facture</label>
+        <input class="edit-field" id="edit-facture" placeholder="ex: 2607661">
+      </div>
+      <button class="btn-save" onclick="sauvegarderCorrection()">Enregistrer la correction</button>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title">Ajouter un document</div>
+      <div class="form-group">
+        <label class="form-label">Type de document</label>
+        <select class="form-select" id="upload-type">
+          <option value="BAD_DAKAR_TERMINAL">BAD Dakar Terminal</option>
+          <option value="BAD_SHIPPING">BAD Shipping</option>
+          <option value="DECLARATION">Déclaration</option>
+          <option value="BILL_OF_LADING">Bill of Lading</option>
+          <option value="PROCURATION">Procuration</option>
+          <option value="CNI_TRANSITAIRE">CNI Transitaire</option>
+          <option value="CNI_CLIENT">CNI Client</option>
+          <option value="FACTURE">Facture</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fichier PDF</label>
+        <input class="edit-field" type="file" id="upload-file" accept=".pdf,.tiff,.tif" style="padding:6px">
+      </div>
+      <button class="btn-save" onclick="uploadDocument()">Envoyer le document</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal nouveau dossier -->
+<div class="modal-overlay" id="modal-overlay" onclick="fermerModal(event)">
+  <div class="modal">
+    <h3>Nouveau dossier</h3>
+    <div class="form-group">
+      <label class="form-label">Nom du client</label>
+      <input class="form-input" id="new-client" placeholder="ex: GILBERTO FERNANDO CA">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nom du transitaire</label>
+      <input class="form-input" id="new-transit" placeholder="ex: TRANSRELAIS">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fermerModalForce()">Annuler</button>
+      <button class="btn-submit" onclick="creerDossier()">Créer le dossier</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Configuration ─────────────────────────────────────────────────
+// Changez cette URL si votre API tourne sur un autre port ou serveur
+const API_BASE = "http://localhost:8000/api/v1";
+
+// ── État ──────────────────────────────────────────────────────────
+let dossiers = [];
+let filtreActif = "tous";
+let recherche = "";
+let dossierSelectionne = null;
+
+// ── Données de démonstration (si l'API n'est pas disponible) ──────
+const DEMO_DOSSIERS = [
+  {
+    id: "a1b2c3d4-0001",
+    client_nom: "GILBERTO FERNANDO CA",
+    transitaire_nom: "TRANSRELAIS",
+    numero_bl: "304448001001",
+    numero_declaration: "2026 15T 32563",
+    numero_facture: "2607661",
+    statut: "complet",
+    cree_le: "2026-04-02T08:30:00",
+    documents: [
+      { id:"d1", type_document:"BAD_DAKAR_TERMINAL", nom_fichier:"bad_dakar.pdf", statut:"traite", score_confiance:0.94 },
+      { id:"d2", type_document:"BILL_OF_LADING",     nom_fichier:"bl_nmtlines.pdf", statut:"traite", score_confiance:1.0 },
+      { id:"d3", type_document:"FACTURE",            nom_fichier:"facture_2607661.pdf", statut:"traite", score_confiance:1.0 },
+      { id:"d4", type_document:"PROCURATION",        nom_fichier:"procuration.pdf", statut:"traite", score_confiance:0.81 },
+    ]
+  },
+  {
+    id: "a1b2c3d4-0002",
+    client_nom: "MAMADOU DIALLO",
+    transitaire_nom: "AGL SENEGAL",
+    numero_bl: "512339002045",
+    numero_declaration: null,
+    numero_facture: null,
+    statut: "en_traitement",
+    cree_le: "2026-04-02T10:15:00",
+    documents: [
+      { id:"d5", type_document:"BAD_DAKAR_TERMINAL", nom_fichier:"bad_dakar2.pdf", statut:"en_traitement", score_confiance:null },
+    ]
+  },
+  {
+    id: "a1b2c3d4-0003",
+    client_nom: "FATOU NDIAYE",
+    transitaire_nom: "BOLLORE PORTS",
+    numero_bl: null,
+    numero_declaration: null,
+    numero_facture: null,
+    statut: "incomplet",
+    cree_le: "2026-04-01T14:22:00",
+    documents: []
+  },
+  {
+    id: "a1b2c3d4-0004",
+    client_nom: "IBRAHIMA SOW",
+    transitaire_nom: "TRANSRELAIS",
+    numero_bl: "698112003877",
+    numero_declaration: "2026 12N 44210",
+    numero_facture: "2607890",
+    statut: "complet",
+    cree_le: "2026-03-30T09:00:00",
+    documents: [
+      { id:"d6", type_document:"FACTURE", nom_fichier:"facture_2607890.pdf", statut:"traite", score_confiance:1.0 },
+      { id:"d7", type_document:"BILL_OF_LADING", nom_fichier:"bl.pdf", statut:"traite", score_confiance:0.88 },
+    ]
+  }
+];
+
+// ── Chargement des données ─────────────────────────────────────────
+async function chargerDonnees() {
+  try {
+    const res = await fetch(`${API_BASE}/dossiers?page=1`);
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    dossiers = data.dossiers || [];
+  } catch {
+    // API non disponible : utiliser les données de démo
+    dossiers = DEMO_DOSSIERS;
+  }
+  afficher();
+}
+
+// ── Affichage ─────────────────────────────────────────────────────
+function afficher() {
+  // Comptes par statut
+  const stats = { tous:dossiers.length, complet:0, en_traitement:0, incomplet:0, erreur:0 };
+  dossiers.forEach(d => { if(stats[d.statut] !== undefined) stats[d.statut]++; });
+  Object.keys(stats).forEach(k => {
+    const el = document.getElementById(`count-${k}`);
+    if(el) el.textContent = stats[k];
+  });
+
+  // Filtrage
+  let liste = dossiers.filter(d => {
+    if (filtreActif !== "tous" && d.statut !== filtreActif) return false;
+    if (recherche) {
+      const q = recherche.toLowerCase();
+      return (d.client_nom||"").toLowerCase().includes(q)
+          || (d.transitaire_nom||"").toLowerCase().includes(q)
+          || (d.numero_bl||"").toLowerCase().includes(q);
+    }
+    return true;
+  });
+
+  document.getElementById("toolbar-count").textContent =
+    `${liste.length} dossier${liste.length !== 1 ? "s" : ""}`;
+
+  const tbody = document.getElementById("table-body");
+  const empty = document.getElementById("empty-state");
+
+  if (liste.length === 0) {
+    tbody.innerHTML = "";
+    empty.style.display = "flex";
+    return;
+  }
+  empty.style.display = "none";
+
+  tbody.innerHTML = liste.map(d => `
+    <tr onclick="ouvrirDetail('${d.id}')" class="${dossierSelectionne?.id === d.id ? 'selected' : ''}">
+      <td>
+        <div class="client-name">${d.client_nom || '<span style="color:var(--muted)">—</span>'}</div>
+        <div class="transit-name">${d.transitaire_nom || ""}</div>
+      </td>
+      <td class="mono-val ${d.numero_bl ? '' : 'mono-null'}">${d.numero_bl || "non extrait"}</td>
+      <td class="mono-val ${d.numero_declaration ? '' : 'mono-null'}">${d.numero_declaration || "non extrait"}</td>
+      <td class="mono-val ${d.numero_facture ? '' : 'mono-null'}">${d.numero_facture || "non extrait"}</td>
+      <td><span class="badge badge-${d.statut}">${labelStatut(d.statut)}</span></td>
+      <td style="color:var(--muted)">${formatDate(d.cree_le)}</td>
+    </tr>
+  `).join("");
+}
+
+function labelStatut(s) {
+  return { complet:"Complet", en_traitement:"En traitement", incomplet:"Incomplet", erreur:"Erreur" }[s] || s;
+}
+
+function formatDate(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  return d.toLocaleDateString("fr-FR", { day:"2-digit", month:"2-digit", year:"numeric" });
+}
+
+// ── Détail dossier ────────────────────────────────────────────────
+async function ouvrirDetail(id) {
+  let dossier = dossiers.find(d => d.id === id);
+  if (!dossier) return;
+
+  // Tenter de récupérer les détails depuis l'API
+  try {
+    const res = await fetch(`${API_BASE}/dossiers/${id}`);
+    if (res.ok) dossier = await res.json();
+  } catch {}
+
+  dossierSelectionne = dossier;
+  afficher();
+
+  // Remplir le panel
+  document.getElementById("panel-title").textContent = dossier.client_nom || "Dossier";
+
+  const setVal = (id, val) => {
+    const el = document.getElementById(id);
+    if (val) { el.textContent = val; el.className = "field-value found"; }
+    else { el.textContent = "non extrait"; el.className = "field-value missing"; }
+  };
+  setVal("p-bl", dossier.numero_bl);
+  setVal("p-decl", dossier.numero_declaration);
+  setVal("p-facture", dossier.numero_facture);
+
+  document.getElementById("edit-bl").value = dossier.numero_bl || "";
+  document.getElementById("edit-decl").value = dossier.numero_declaration || "";
+  document.getElementById("edit-facture").value = dossier.numero_facture || "";
+
+  const docs = dossier.documents || [];
+  document.getElementById("p-docs").innerHTML = docs.length === 0
+    ? '<div style="color:var(--muted);font-size:12px;font-style:italic">Aucun document uploadé</div>'
+    : docs.map(d => {
+        const score = d.score_confiance;
+        const scoreHtml = score !== null && score !== undefined
+          ? `<span class="doc-score ${score >= .85 ? 'score-high' : score >= .65 ? 'score-mid' : 'score-low'}">${Math.round(score*100)}%</span>`
+          : `<span class="doc-score" style="color:var(--muted)">—</span>`;
+        return `<div class="doc-item">
+          <div class="doc-icon doc-icon-pdf">PDF</div>
+          <div style="flex:1;overflow:hidden">
+            <div class="doc-name">${d.nom_fichier || d.type_document}</div>
+            <div class="doc-type">${labelType(d.type_document)}</div>
+          </div>
+          ${scoreHtml}
+        </div>`;
+      }).join("");
+
+  document.getElementById("detail-overlay").classList.add("open");
+}
+
+function labelType(t) {
+  return {
+    BAD_DAKAR_TERMINAL:"BAD Dakar Terminal", BAD_SHIPPING:"BAD Shipping",
+    DECLARATION:"Déclaration", BILL_OF_LADING:"Bill of Lading",
+    PROCURATION:"Procuration", CNI_TRANSITAIRE:"CNI Transitaire",
+    CNI_CLIENT:"CNI Client", FACTURE:"Facture"
+  }[t] || t;
+}
+
+function fermerDetail(e) {
+  if (e.target === document.getElementById("detail-overlay")) fermerDetailForce();
+}
+function fermerDetailForce() {
+  document.getElementById("detail-overlay").classList.remove("open");
+  dossierSelectionne = null;
+  afficher();
+}
+
+// ── Correction manuelle ───────────────────────────────────────────
+async function sauvegarderCorrection() {
+  if (!dossierSelectionne) return;
+  const body = new FormData();
+  const bl = document.getElementById("edit-bl").value.trim();
+  const decl = document.getElementById("edit-decl").value.trim();
+  const fac = document.getElementById("edit-facture").value.trim();
+  if (bl) body.append("numero_bl", bl);
+  if (decl) body.append("numero_declaration", decl);
+  if (fac) body.append("numero_facture", fac);
+
+  try {
+    await fetch(`${API_BASE}/dossiers/${dossierSelectionne.id}`, { method:"PATCH", body });
+  } catch {}
+
+  // Mettre à jour localement
+  const idx = dossiers.findIndex(d => d.id === dossierSelectionne.id);
+  if (idx >= 0) {
+    if (bl) dossiers[idx].numero_bl = bl;
+    if (decl) dossiers[idx].numero_declaration = decl;
+    if (fac) dossiers[idx].numero_facture = fac;
+    if (bl && decl && fac) dossiers[idx].statut = "complet";
+  }
+  fermerDetailForce();
+  afficher();
+}
+
+// ── Upload document ────────────────────────────────────────────────
+async function uploadDocument() {
+  if (!dossierSelectionne) return;
+  const type = document.getElementById("upload-type").value;
+  const file = document.getElementById("upload-file").files[0];
+  if (!file) { alert("Veuillez sélectionner un fichier."); return; }
+
+  const body = new FormData();
+  body.append("type_document", type);
+  body.append("fichier", file);
+
+  try {
+    const res = await fetch(`${API_BASE}/dossiers/${dossierSelectionne.id}/documents`, { method:"POST", body });
+    if (res.ok) {
+      // Ajouter localement pour feedback immédiat
+      const idx = dossiers.findIndex(d => d.id === dossierSelectionne.id);
+      if (idx >= 0) {
+        dossiers[idx].documents = dossiers[idx].documents || [];
+        dossiers[idx].documents.push({ type_document:type, nom_fichier:file.name, statut:"en_traitement", score_confiance:null });
+        dossiers[idx].statut = "en_traitement";
+      }
+      ouvrirDetail(dossierSelectionne.id);
+    }
+  } catch {
+    alert("API non disponible. En mode démonstration, l'upload est simulé.");
+  }
+}
+
+// ── Nouveau dossier ────────────────────────────────────────────────
+function openModal() {
+  document.getElementById("modal-overlay").classList.add("open");
+}
+function fermerModal(e) {
+  if (e.target === document.getElementById("modal-overlay")) fermerModalForce();
+}
+function fermerModalForce() {
+  document.getElementById("modal-overlay").classList.remove("open");
+}
+
+async function creerDossier() {
+  const client = document.getElementById("new-client").value.trim();
+  const transit = document.getElementById("new-transit").value.trim();
+  if (!client) { alert("Le nom du client est requis."); return; }
+
+  const body = new FormData();
+  body.append("client_nom", client);
+  body.append("transitaire_nom", transit);
+
+  let newId = `demo-${Date.now()}`;
+  try {
+    const res = await fetch(`${API_BASE}/dossiers`, { method:"POST", body });
+    if (res.ok) { const data = await res.json(); newId = data.dossier_id; }
+  } catch {}
+
+  dossiers.unshift({
+    id: newId,
+    client_nom: client,
+    transitaire_nom: transit,
+    numero_bl: null,
+    numero_declaration: null,
+    numero_facture: null,
+    statut: "incomplet",
+    cree_le: new Date().toISOString(),
+    documents: []
+  });
+
+  fermerModalForce();
+  document.getElementById("new-client").value = "";
+  document.getElementById("new-transit").value = "";
+  afficher();
+}
+
+// ── Filtres & recherche ───────────────────────────────────────────
+function setFilter(f, btn) {
+  filtreActif = f;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  afficher();
+}
+
+document.getElementById("search-input").addEventListener("input", e => {
+  recherche = e.target.value;
+  afficher();
+});
+
+// ── Actualisation automatique toutes les 10s ──────────────────────
+chargerDonnees();
+setInterval(chargerDonnees, 10000);
+</script>
+</body>
+</html>
