@@ -15,7 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Copier l'interface web dans le conteneur
-COPY ../interface /app/interface
+RUN mkdir -p /app/interface
+
+COPY ../interface/index.html /app/interface/index.html
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
