@@ -1,8 +1,8 @@
 import uuid, json, os
+from fastapi.staticfiles import StaticFiles
 from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
 from database import get_db, get_redis, ensure_upload_dir, UPLOAD_DIR
 
 app = FastAPI(title="Scannage Cloud API", version="1.0")
@@ -14,9 +14,7 @@ TYPES_VALIDES = {"BAD_DAKAR_TERMINAL","BAD_SHIPPING","DECLARATION","BILL_OF_LADI
 def startup():
     ensure_upload_dir()
 
-@app.get("/")
-def accueil():
-    return FileResponse("/app/index.html")
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 @app.post("/api/v1/dossiers", status_code=201)
 async def creer_dossier(request: Request):
