@@ -38,6 +38,7 @@ def startup():
 @app.post("/api/v1/dossiers", status_code=201)
 async def creer_dossier(request: Request):
     content_type = request.headers.get("content-type", "")
+
     if "application/json" in content_type:
         body = await request.json()
         client_nom = body.get("client_nom", "")
@@ -46,6 +47,25 @@ async def creer_dossier(request: Request):
         form = await request.form()
         client_nom = form.get("client_nom", "")
         transitaire_nom = form.get("transitaire_nom", "")
+
+    db = get_db()
+    cur = db.cursor()
+
+    dossier_id = str(uuid.uuid4())
+
+    cur.execute(
+        """
+        INSERT INTO dossiers (id, client_nom, transitaire_nom, statut)
+        VALUES (%s, %s, %s, 'incomplet')
+        """,
+        (dossier_id, client_nom, transitaire_nom)
+    )
+
+    db.commit()
+    cur.close()
+    db.close()
+
+    return {"dossier_id": dossier_id, "statut": "incomplet"}
 
 # ── Consulter un dossier ──────────────────────────────────────────
 
