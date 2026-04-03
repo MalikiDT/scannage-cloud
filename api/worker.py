@@ -14,8 +14,7 @@ import time
 sys.path.insert(0, "/app/pipeline_ocr")
 
 from pipeline import process_document
-from database import get_db, get_minio, get_redis, BUCKET_NAME
-
+from database import get_db, get_redis, UPLOAD_DIR
 
 def mettre_a_jour_dossier(cur, dossier_id: str, donnees: dict):
     """
@@ -60,18 +59,8 @@ def traiter_tache(tache_json: str):
 
     print(f"\nTraitement : {nom_fichier} ({type_doc})")
 
-    # Télécharger le fichier depuis MinIO
-    minio = get_minio()
-    extension = os.path.splitext(chemin)[1] or ".pdf"
-    with tempfile.NamedTemporaryFile(delete=False, suffix=extension) as tmp:
-        tmp_path = tmp.name
-
-    try:
-        minio.fget_object(BUCKET_NAME, chemin, tmp_path)
-    except Exception as e:
-        print(f"  Erreur téléchargement MinIO : {e}")
-        _marquer_erreur(document_id, str(e))
-        return
+    # ✅ Fichier déjà local
+    tmp_path = chemin
 
     # Lancer le pipeline OCR
     try:
@@ -79,17 +68,12 @@ def traiter_tache(tache_json: str):
     except Exception as e:
         print(f"  Erreur pipeline : {e}")
         _marquer_erreur(document_id, str(e))
-        os.unlink(tmp_path)
         return
-    finally:
-        if os.path.exists(tmp_path):
-            os.unlink(tmp_path)
 
     print(f"  Méthode : {resultat['methode']} | "
           f"Confiance : {resultat['score_confiance']:.0%} | "
           f"Données : {resultat['donnees_extraites']}")
 
-    # Mettre à jour la base de données
     db = get_db()
     cur = db.cursor()
 
