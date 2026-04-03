@@ -36,7 +36,7 @@ def startup():
 
 @app.get("/")
 def accueil():
-    return FileResponse("/app/interface/index.html")
+    return FileResponse("/app/index.html")
 
 
 # ── Créer un dossier ──────────────────────────────────────────────
