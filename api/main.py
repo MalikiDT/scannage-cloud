@@ -1,14 +1,24 @@
 import uuid
 import json
 import os
-import shutil
 from datetime import datetime
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from database import get_db, get_redis, ensure_upload_dir, UPLOAD_DIR
 
 app = FastAPI(title="Scannage Cloud API", version="1.0")
+
+# Autoriser les appels depuis n'importe quelle origine
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 TYPES_VALIDES = {
     "BAD_DAKAR_TERMINAL", "BAD_SHIPPING", "DECLARATION",
@@ -20,6 +30,13 @@ TYPES_VALIDES = {
 @app.on_event("startup")
 def startup():
     ensure_upload_dir()
+
+
+# ── Interface web ─────────────────────────────────────────────────
+
+@app.get("/")
+def accueil():
+    return FileResponse("/app/interface/index.html")
 
 
 # ── Créer un dossier ──────────────────────────────────────────────
@@ -97,7 +114,7 @@ async def uploader_document(
     fichier: UploadFile = File(...)
 ):
     if type_document.upper() not in TYPES_VALIDES:
-        raise HTTPException(status_code=400, detail=f"Type invalide.")
+        raise HTTPException(status_code=400, detail="Type invalide.")
 
     db = get_db()
     cur = db.cursor()
@@ -170,9 +187,9 @@ def corriger_dossier(
     db = get_db()
     cur = db.cursor()
     mises_a_jour = {}
-    if numero_bl:        mises_a_jour["numero_bl"] = numero_bl
+    if numero_bl:          mises_a_jour["numero_bl"] = numero_bl
     if numero_declaration: mises_a_jour["numero_declaration"] = numero_declaration
-    if numero_facture:   mises_a_jour["numero_facture"] = numero_facture
+    if numero_facture:     mises_a_jour["numero_facture"] = numero_facture
     if not mises_a_jour:
         raise HTTPException(status_code=400, detail="Aucun champ fourni")
     set_clause = ", ".join(f"{k} = %s" for k in mises_a_jour)
@@ -186,11 +203,9 @@ def corriger_dossier(
         (dossier_id,)
     )
     row = cur.fetchone()
-    if row and all(row):
+    statut = "complet" if row and all(row) else "en_traitement"
+    if statut == "complet":
         cur.execute("UPDATE dossiers SET statut = 'complet' WHERE id = %s", (dossier_id,))
-        statut = "complet"
-    else:
-        statut = "en_traitement"
     db.commit()
     cur.close()
     db.close()
