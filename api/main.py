@@ -20,10 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 🔥 IMPORTANT : tes routes API
-# app.include_router(router, prefix="/api/v1")
-
-# 🔥 CRUCIAL : sert le frontend
+# FRONTEND
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 TYPES_VALIDES = {
@@ -37,27 +34,7 @@ TYPES_VALIDES = {
 def startup():
     ensure_upload_dir()
 
-
-# ── Interface web ─────────────────────────────────────────────────
-
-
 # ── Créer un dossier ──────────────────────────────────────────────
-
-# @app.post("/api/v1/dossiers", status_code=201)
-# def creer_dossier(client_nom: str = Form(""), transitaire_nom: str = Form("")):
-#     db = get_db()
-#     cur = db.cursor()
-#     dossier_id = str(uuid.uuid4())
-#     cur.execute(
-#         """INSERT INTO dossiers (id, client_nom, transitaire_nom, statut)
-#            VALUES (%s, %s, %s, 'incomplet')""",
-#         (dossier_id, client_nom, transitaire_nom)
-#     )
-#     db.commit()
-#     cur.close()
-#     db.close()
-#     return {"dossier_id": dossier_id, "statut": "incomplet"}
-
 @app.post("/api/v1/dossiers", status_code=201)
 async def creer_dossier(request: Request):
     content_type = request.headers.get("content-type", "")
