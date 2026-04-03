@@ -21,7 +21,7 @@ app.add_middleware(
 )
 
 # 🔥 IMPORTANT : tes routes API
-app.include_router(router, prefix="/api/v1")
+# app.include_router(router, prefix="/api/v1")
 
 # 🔥 CRUCIAL : sert le frontend
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
@@ -39,10 +39,6 @@ def startup():
 
 
 # ── Interface web ─────────────────────────────────────────────────
-
-# @app.get("/")
-# def accueil():
-#     return FileResponse("/app/index.html")
 
 
 # ── Créer un dossier ──────────────────────────────────────────────
