@@ -60,7 +60,7 @@ def traiter_tache(tache_json: str):
 
     print(f"\nTraitement : {nom_fichier} ({type_doc})")
 
-    # ✅ Fichier déjà local
+    # Fichier déjà local
     tmp_path = chemin
 
     # Lancer le pipeline OCR
