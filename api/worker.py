@@ -11,7 +11,6 @@ import tempfile
 import time
 
 # On ajoute le dossier pipeline_ocr au chemin Python
-# sys.path.insert(0, "/app/pipeline_ocr")
 sys.path.insert(0, "/app/pipeline_ocr")
 
 from pipeline import process_document
