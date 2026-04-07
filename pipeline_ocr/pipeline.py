@@ -61,7 +61,6 @@ def process_document(pdf_path: str, type_document: str) -> dict:
         "erreur": None
     }
 
-
 # ─── Test rapide en ligne de commande ────────────────────────────────────────
 if __name__ == "__main__":
     import sys
