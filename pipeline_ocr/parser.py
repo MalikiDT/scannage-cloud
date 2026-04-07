@@ -36,16 +36,17 @@ FACTURE_PATTERNS = [
 # ─── Fonctions d'extraction ───────────────────────────────────────────────────
 
 def extract_numero_bl(text: str) -> Optional[str]:
-    """
-    Cherche le numéro de B/L dans le texte.
-    Essaie chaque label connu dans l'ordre.
-    """
     for pattern in BL_PATTERNS:
         match = pattern.search(text)
         if match:
             return match.group(1).strip()
-    return None
 
+    # fallback intelligent
+    fallback = re.search(r"\b[A-Z]{4,}[A-Z0-9]{6,}\b", text)
+    if fallback:
+        return fallback.group(0)
+
+    return None
 
 def extract_numero_declaration(text: str) -> Optional[str]:
     """
