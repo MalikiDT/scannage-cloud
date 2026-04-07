@@ -13,7 +13,7 @@ BL_LABELS = [
     r"Num\s+B/?L\s*[:\-]?\s*",
     r"Marks\s+and\s+Nos\.?\s*[:\-]?\s*"
 ]
-BL_VALUE = r"([A-Z0-9]{8,15})"
+BL_VALUE = r"([A-Z0-9]{8,25})"
 BL_PATTERNS = [re.compile(label + BL_VALUE, re.IGNORECASE) for label in BL_LABELS]
 
 # Numéro de déclaration : AAAA XX(chiffres+lettres) suite_chiffres
