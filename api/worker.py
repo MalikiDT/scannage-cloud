@@ -15,6 +15,7 @@ import time
 sys.path.insert(0, "/app/pipeline_ocr")
 
 from pipeline import process_document
+
 from database import get_db, get_redis, UPLOAD_DIR
 
 def mettre_a_jour_dossier(cur, dossier_id: str, donnees: dict):
