@@ -11,6 +11,7 @@ BL_LABELS = [
     r"\bCN\s*[:\-]?\s*",
     r"B/?L\s*No\.?\s*[:\-]?\s*",
     r"Num\s+B/?L\s*[:\-]?\s*",
+    r"Marks\s+and\s+Nos\.?\s*[:\-]?\s*"
 ]
 BL_VALUE = r"([A-Z0-9]{8,15})"
 BL_PATTERNS = [re.compile(label + BL_VALUE, re.IGNORECASE) for label in BL_LABELS]
