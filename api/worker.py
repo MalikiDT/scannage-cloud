@@ -11,7 +11,9 @@ import tempfile
 import time
 
 # On ajoute le dossier pipeline_ocr au chemin Python
-sys.path.insert(0, "/app/pipeline_ocr")
+# sys.path.insert(0, "/app/pipeline_ocr")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(BASE_DIR, "..", "pipeline_ocr"))
 
 from pipeline import process_document
 from database import get_db, get_redis, UPLOAD_DIR
