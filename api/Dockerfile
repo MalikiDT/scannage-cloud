@@ -13,6 +13,6 @@ WORKDIR /app
 COPY api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY api/ .
+COPY . .
 
 CMD ["python", "worker.py"]
