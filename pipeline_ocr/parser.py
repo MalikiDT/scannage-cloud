@@ -42,7 +42,7 @@ def extract_numero_bl(text: str) -> Optional[str]:
             return match.group(1).strip()
 
     # fallback intelligent
-    fallback = re.search(r"\b[A-Z]{4,}[A-Z0-9]{6,}\b", text)
+    fallback = re.search(r"\b[A-Z]{3,}[A-Z0-9]{8,}\b", text)
     if fallback:
         return fallback.group(0)
 
