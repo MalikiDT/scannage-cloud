@@ -4,6 +4,8 @@ from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from database import get_db, get_redis, ensure_upload_dir, UPLOAD_DIR
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 app = FastAPI(title="Scannage Cloud API", version="1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
@@ -13,8 +15,6 @@ TYPES_VALIDES = {"BAD_DAKAR_TERMINAL","BAD_SHIPPING","DECLARATION","BILL_OF_LADI
 @app.on_event("startup")
 def startup():
     ensure_upload_dir()
-
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 @app.post("/api/v1/dossiers", status_code=201)
 async def creer_dossier(request: Request):
@@ -85,3 +85,21 @@ def corriger_dossier(dossier_id: str, numero_bl: str=Form(None), numero_declarat
     if statut=="complet": cur.execute("UPDATE dossiers SET statut='complet' WHERE id=%s",(dossier_id,))
     db.commit(); cur.close(); db.close()
     return {"dossier_id":dossier_id,"statut":statut}
+
+# ===============================
+# STATIC
+# ===============================
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+app.mount(
+    "/static",
+    StaticFiles(directory=os.path.join(BASE_DIR, "static")),
+    name="static"
+)
+
+from fastapi.responses import FileResponse
+
+@app.get("/")
+def serve_index():
+    return FileResponse(os.path.join(BASE_DIR, "static", "index.html"))
