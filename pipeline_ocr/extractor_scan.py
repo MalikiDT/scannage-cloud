@@ -50,19 +50,11 @@ def preprocess_image(pil_image: Image.Image) -> Image.Image:
     return Image.fromarray(binary)
 
 
-def extract_text_scan(pdf_path: str, dpi: int = 300) -> dict:
-    """
-    Convertit chaque page du PDF en image haute résolution,
-    applique le préprocessing, puis lance Tesseract OCR.
-    
-    Langues supportées : français + anglais + portugais
-    (couvre tous les documents de la liasse)
-    
-    Retourne un dict { numero_page: texte } et un score de confiance
-    calculé à partir des scores de confiance Tesseract par page.
-    """
+def _extract_text_scan(pdf_path: str, dpi: int, type_document: str | None = None) -> dict:
     pages = {}
     scores = []
+    psm = 4 if type_document == "FACTURE" else 6
+    config = f"--oem 3 --psm {psm}"
 
     try:
         images = convert_from_path(pdf_path, dpi=dpi)
@@ -77,27 +69,31 @@ def extract_text_scan(pdf_path: str, dpi: int = 300) -> dict:
     for i, image in enumerate(images, start=1):
         processed = preprocess_image(image)
 
-        # OCR avec données de confiance par mot
         data = pytesseract.image_to_data(
             processed,
             lang="fra+eng+por",
-            config="--oem 3 --psm 6",
+            config=config,
             output_type=pytesseract.Output.DICT
         )
 
-        # Calcul du score de confiance moyen (on ignore les -1 = espaces)
-        word_scores = [
-            int(c) for c in data["conf"]
-            if str(c).strip() not in ("-1", "")
-        ]
+        word_scores = []
+        for confidence, word in zip(data["conf"], data["text"]):
+            if str(confidence).strip() in ("-1", ""):
+                continue
+            if len(str(word).strip()) < 2:
+                continue
+            try:
+                word_scores.append(int(float(confidence)))
+            except (TypeError, ValueError):
+                continue
+
         page_score = round(sum(word_scores) / len(word_scores) / 100, 3) if word_scores else 0.0
         scores.append(page_score)
 
-        # Texte reconstitué
         text = pytesseract.image_to_string(
             processed,
             lang="fra+eng+por",
-            config="--oem 3 --psm 6"
+            config=config
         )
         pages[i] = text.strip()
 
@@ -108,3 +104,10 @@ def extract_text_scan(pdf_path: str, dpi: int = 300) -> dict:
         "score_confiance": score_global,
         "methode": "ocr"
     }
+
+
+def extract_text_scan(pdf_path: str, dpi: int = 300, type_document: str | None = None) -> dict:
+    result = _extract_text_scan(pdf_path, dpi=dpi, type_document=type_document)
+    if result.get("score_confiance", 0.0) < 0.5 and dpi < 400 and not result.get("erreur"):
+        return _extract_text_scan(pdf_path, dpi=400, type_document=type_document)
+    return result

@@ -37,7 +37,7 @@ def process_document(pdf_path: str, type_document: str) -> dict:
     if natif:
         extraction = extract_text_native(pdf_path)
     else:
-        extraction = extract_text_scan(pdf_path)
+        extraction = extract_text_scan(pdf_path, type_document=type_document)
 
     if "erreur" in extraction:
         return {

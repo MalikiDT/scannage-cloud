@@ -19,8 +19,16 @@ BL_PATTERNS = [re.compile(label + BL_VALUE, re.IGNORECASE) for label in BL_LABEL
 # Numéro de déclaration : AAAA XX(chiffres+lettres) suite_chiffres
 # Exemples : "2026 15T 32563", "2025 18N 5104"
 DECL_PATTERN = re.compile(
-    r"\b(20\d{2})\s+(\d{2}[A-Z])\s+(\d{4,6})\b"
+    r"\b(20\d{2})\s+(\d{2}[A-Z])\s+(\d{4,6})\b",
+    re.MULTILINE,
 )
+
+FAUX_POSITIFS_BL = {
+    "REPUBLIQUE",
+    "SENEGAL",
+    "MINISTERE",
+    "TRANSITAIRE",
+}
 
 # Numéro de facture : précédé par "Facture N°" ou "Facture No"
 FACTURE_LABELS = [
@@ -42,9 +50,11 @@ def extract_numero_bl(text: str) -> Optional[str]:
             return match.group(1).strip()
 
     # fallback intelligent
-    fallback = re.search(r"\b[A-Z]{3,}[A-Z0-9]{8,}\b", text)
+    fallback = re.search(r"\b[A-Z]{3,}[A-Z0-9]{8,20}\b", text)
     if fallback:
-        return fallback.group(0)
+        candidate = fallback.group(0).upper()
+        if candidate not in FAUX_POSITIFS_BL:
+            return candidate
 
     return None
 
