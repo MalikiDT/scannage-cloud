@@ -1,8 +1,7 @@
-from detector import is_native_pdf
-from extractor_native import extract_text_native
-from extractor_scan import extract_text_scan
-from parser import parse_document
-
+from pipeline_ocr.detector import is_native_pdf
+from pipeline_ocr.extractor_native import extract_text_native
+from pipeline_ocr.extractor_scan import extract_text_scan
+from pipeline_ocr.parser import parse_document
 
 def process_document(pdf_path: str, type_document: str) -> dict:
     """
