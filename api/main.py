@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from database import get_db, get_redis, ensure_upload_dir, UPLOAD_DIR
+from api.database import get_db, get_redis, ensure_upload_dir, UPLOAD_DIR
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
