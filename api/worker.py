@@ -1,127 +1,121 @@
-"""
-Worker OCR — tourne en permanence en arrière-plan.
-Il attend des tâches dans la file Redis, télécharge le fichier
-depuis MinIO, lance le pipeline OCR, et met à jour la base de données.
-"""
+# /app/api/worker.py
 
 import json
-import os
-import sys
-import tempfile
 import time
+
 from pipeline_ocr.pipeline import process_document
-from database import get_db, get_redis, UPLOAD_DIR
+from api.database import get_db, get_redis
 
-# On ajoute le dossier pipeline_ocr au chemin Python
-sys.path.insert(0, "/app/pipeline_ocr")
 
-def mettre_a_jour_dossier(cur, dossier_id: str, donnees: dict):
-    """
-    Met à jour les numéros dans le dossier si on a trouvé quelque chose
-    de mieux que ce qui est déjà en base (on ne remplace pas par None).
-    Passe le statut à 'complet' si les 3 numéros sont renseignés.
-    """
-    champs = ["numero_bl", "numero_declaration", "numero_facture"]
-    for champ in champs:
-        valeur = donnees.get(champ)
-        if valeur:
+def update_dossier(cur, dossier_id: str, data: dict):
+    fields = ["numero_bl", "numero_declaration", "numero_facture"]
+
+    for field in fields:
+        value = data.get(field)
+        if value:
             cur.execute(
-                f"UPDATE dossiers SET {champ} = %s, mis_a_jour_le = NOW() "
-                f"WHERE id = %s AND {champ} IS NULL",
-                (valeur, dossier_id)
+                f"""
+                UPDATE dossiers
+                SET {field} = %s, mis_a_jour_le = NOW()
+                WHERE id = %s AND {field} IS NULL
+                """,
+                (value, dossier_id),
             )
 
-    # Vérifier si le dossier est complet
     cur.execute(
-        "SELECT numero_bl, numero_declaration, numero_facture FROM dossiers WHERE id = %s",
-        (dossier_id,)
+        """
+        SELECT numero_bl, numero_declaration, numero_facture
+        FROM dossiers WHERE id = %s
+        """,
+        (dossier_id,),
     )
+
     row = cur.fetchone()
+
     if row and all(row):
         cur.execute(
             "UPDATE dossiers SET statut = 'complet' WHERE id = %s",
-            (dossier_id,)
+            (dossier_id,),
         )
-        print(f"  Dossier {dossier_id} : COMPLET")
+        print(f"[OK] Dossier {dossier_id} complet")
     else:
-        manquants = [champs[i] for i, v in enumerate(row or []) if not v]
-        print(f"  Dossier {dossier_id} : manque encore {manquants}")
+        print(f"[INFO] Dossier {dossier_id} incomplet")
 
 
-def traiter_tache(tache_json: str):
-    tache = json.loads(tache_json)
-    document_id = tache["document_id"]
-    dossier_id  = tache["dossier_id"]
-    chemin      = tache["chemin"]
-    type_doc    = tache["type_document"]
-    nom_fichier = tache.get("nom_fichier", "")
-
-    print(f"\nTraitement : {nom_fichier} ({type_doc})")
-
-    # Fichier déjà local
-    tmp_path = chemin
-
-    # Lancer le pipeline OCR
-    try:
-        resultat = process_document(tmp_path, type_doc)
-    except Exception as e:
-        print(f"  Erreur pipeline : {e}")
-        _marquer_erreur(document_id, str(e))
-        return
-
-    print(f"  Méthode : {resultat['methode']} | "
-          f"Confiance : {resultat['score_confiance']:.0%} | "
-          f"Données : {resultat['donnees_extraites']}")
-
+def mark_error(document_id: str):
     db = get_db()
     cur = db.cursor()
 
     cur.execute(
-        """UPDATE documents
-           SET statut = %s, score_confiance = %s, traite_le = NOW()
-           WHERE id = %s""",
-        (
-            "erreur" if resultat.get("erreur") else "traite",
-            resultat["score_confiance"],
-            document_id
-        )
+        """
+        UPDATE documents
+        SET statut = 'erreur', traite_le = NOW()
+        WHERE id = %s
+        """,
+        (document_id,),
     )
-
-    if not resultat.get("erreur") and resultat["donnees_extraites"]:
-        mettre_a_jour_dossier(cur, dossier_id, resultat["donnees_extraites"])
 
     db.commit()
     cur.close()
     db.close()
 
 
-def _marquer_erreur(document_id: str, message: str):
+def process_task(task_json: str):
+    task = json.loads(task_json)
+
+    doc_id = task["document_id"]
+    dossier_id = task["dossier_id"]
+    path = task["chemin"]
+    doc_type = task["type_document"]
+
+    print(f"\n[WORKER] Processing {path}")
+
     try:
-        db = get_db()
-        cur = db.cursor()
-        cur.execute(
-            "UPDATE documents SET statut = 'erreur', traite_le = NOW() WHERE id = %s",
-            (document_id,)
-        )
-        db.commit()
-        cur.close()
-        db.close()
-    except Exception:
-        pass
-
-
-# ── Boucle principale ─────────────────────────────────────────────
-
-print("Worker OCR démarré. En attente de tâches...")
-
-while True:
-    try:
-        r = get_redis()
-        # Attendre une tâche (timeout 5 secondes, puis on reboucle)
-        tache = r.brpop("queue_ocr", timeout=5)
-        if tache:
-            _, tache_json = tache
-            traiter_tache(tache_json.decode())
+        result = process_document(path, doc_type)
     except Exception as e:
-        print(f"Erreur worker : {e}")
-        time.sleep(3)
+        print(f"[ERROR] OCR failed: {e}")
+        mark_error(doc_id)
+        return
+
+    db = get_db()
+    cur = db.cursor()
+
+    cur.execute(
+        """
+        UPDATE documents
+        SET statut = %s, score_confiance = %s, traite_le = NOW()
+        WHERE id = %s
+        """,
+        (
+            "erreur" if result.get("erreur") else "traite",
+            result["score_confiance"],
+            doc_id,
+        ),
+    )
+
+    if not result.get("erreur"):
+        update_dossier(cur, dossier_id, result["donnees_extraites"])
+
+    db.commit()
+    cur.close()
+    db.close()
+
+
+def run_worker():
+    print("Worker OCR démarré")
+
+    r = get_redis()
+
+    while True:
+        try:
+            task = r.brpop("queue_ocr", timeout=5)
+            if task:
+                _, data = task
+                process_task(data.decode())
+        except Exception as e:
+            print(f"[WORKER ERROR] {e}")
+            time.sleep(3)
+
+
+if __name__ == "__main__":
+    run_worker()
