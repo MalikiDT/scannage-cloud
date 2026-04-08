@@ -1,5 +1,8 @@
+# /Dockerfile
+
 FROM python:3.11-slim
 
+# System deps
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     tesseract-ocr-fra \
@@ -10,9 +13,13 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-COPY api/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "api/worker.py"]
+# dossier uploads
+RUN mkdir -p /app/uploads
+
+# IMPORTANT: lancer comme module
+CMD ["python", "-m", "api.worker"]
