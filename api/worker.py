@@ -15,7 +15,10 @@ logging.basicConfig(
 logger = logging.getLogger("worker")
 
 
+# ─── Helpers DB ───────────────────────────────────────────────────────────────
+
 def update_dossier(cur, dossier_id: str, data: dict):
+    """Met à jour les champs extraits du dossier (sans écraser une valeur déjà présente)."""
     fields = ["numero_bl", "numero_declaration", "numero_facture"]
 
     for field in fields:
@@ -31,125 +34,152 @@ def update_dossier(cur, dossier_id: str, data: dict):
             )
 
     cur.execute(
-        """
-        SELECT numero_bl, numero_declaration, numero_facture
-        FROM dossiers WHERE id = %s
-        """,
+        "SELECT numero_bl, numero_declaration, numero_facture FROM dossiers WHERE id = %s",
         (dossier_id,),
     )
-
     row = cur.fetchone()
 
     if row and all(row):
-        cur.execute(
-            "UPDATE dossiers SET statut = 'complet' WHERE id = %s",
-            (dossier_id,),
-        )
-        logger.info("Dossier %s complet", dossier_id)
+        cur.execute("UPDATE dossiers SET statut = 'complet' WHERE id = %s", (dossier_id,))
+        logger.info("Dossier %s → complet", dossier_id)
     else:
-        logger.info("Dossier %s incomplet", dossier_id)
+        missing = [f for f, v in zip(fields, row or []) if not v]
+        logger.info("Dossier %s → incomplet (manquants : %s)", dossier_id, missing)
 
 
 def mark_error(document_id: str):
+    """Marque un document en erreur — appelé uniquement après épuisement des retries."""
     with get_db() as db:
         cur = db.cursor()
         cur.execute(
-            """
-            UPDATE documents
-            SET statut = 'erreur', traite_le = NOW()
-            WHERE id = %s
-            """,
+            "UPDATE documents SET statut = 'erreur', traite_le = NOW() WHERE id = %s",
             (document_id,),
         )
+    logger.warning("Document %s marqué erreur", document_id)
 
+
+# ─── Traitement ───────────────────────────────────────────────────────────────
 
 def process_task(task_json: str):
+    """
+    Traite une tâche OCR du début à la fin.
+
+    Laisse toutes les exceptions remonter — c'est process_task_with_retry
+    qui décide si on réessaie ou si on abandonne.
+    """
     task = json.loads(task_json)
-
-    doc_id = task["document_id"]
+    doc_id     = task["document_id"]
     dossier_id = task["dossier_id"]
-    path = task["chemin"]
-    doc_type = task["type_document"]
+    path       = task["chemin"]
+    doc_type   = task["type_document"]
 
-    logger.info("Processing document %s (dossier=%s, path=%s)", doc_id, dossier_id, path)
+    logger.info("Début traitement document=%s dossier=%s", doc_id, dossier_id)
 
-    try:
-        result = process_document(path, doc_type)
-    except Exception as e:
-        logger.exception("OCR failed for %s", doc_id)
-        mark_error(doc_id)
-        return
+    # Peut lever une exception — laissée remonter intentionnellement
+    result = process_document(path, doc_type)
 
+    statut = "erreur" if result.get("erreur") else "traite"
+    logger.info(
+        "OCR terminé document=%s méthode=%s score=%.2f statut=%s erreur=%s",
+        doc_id,
+        result.get("methode"),
+        result.get("score_confiance", 0.0),
+        statut,
+        result.get("erreur"),
+    )
+
+    # Écriture en base — dans une seule transaction (UPDATE doc + UPDATE dossier)
     with get_db() as db:
         cur = db.cursor()
-
         cur.execute(
             """
             UPDATE documents
             SET statut = %s, score_confiance = %s, traite_le = NOW()
             WHERE id = %s
             """,
-            (
-                "erreur" if result.get("erreur") else "traite",
-                result["score_confiance"],
-                doc_id,
-            ),
+            (statut, result["score_confiance"], doc_id),
         )
-
         if not result.get("erreur"):
             update_dossier(cur, dossier_id, result["donnees_extraites"])
 
 
 def process_task_with_retry(task_json: str, max_retries: int = 3):
-    task = json.loads(task_json)
+    """
+    Enveloppe process_task avec un backoff exponentiel.
+
+    Retries déclenchés uniquement sur les erreurs inattendues (exception non captée).
+    Les erreurs métier (score bas, champ non trouvé) sont gérées dans process_task
+    et n'en sortent pas comme exceptions.
+    """
+    task   = json.loads(task_json)
+    doc_id = task["document_id"]
+
     for attempt in range(max_retries):
         try:
             process_task(task_json)
-            return
+            return  # succès
+
         except Exception as exc:
-            if attempt == max_retries - 1:
-                logger.exception("Permanent failure for document %s after %d attempts", task["document_id"], max_retries)
-                mark_error(task["document_id"])
-                raise
-            backoff = 2 ** attempt
+            is_last = attempt == max_retries - 1
+
+            if is_last:
+                logger.error(
+                    "Échec définitif document=%s après %d tentatives : %s",
+                    doc_id, max_retries, exc,
+                    exc_info=True,
+                )
+                mark_error(doc_id)
+                raise  # laisse remonter → dead letter queue dans run_worker
+
+            backoff = 2 ** attempt  # 1s, 2s, 4s
             logger.warning(
-                "Retry %d/%d for document %s after transient error: %s",
-                attempt + 1,
-                max_retries,
-                task["document_id"],
-                exc,
-                exc_info=True,
+                "Erreur transitoire document=%s tentative %d/%d, retry dans %ds : %s",
+                doc_id, attempt + 1, max_retries, backoff, exc,
             )
             time.sleep(backoff)
 
 
+# ─── Boucle principale ────────────────────────────────────────────────────────
+
 def run_worker():
-    logger.info("🚀 Worker OCR démarré")
+    logger.info("Worker OCR démarré (PID %s)", os.getpid())
+    logger.info("REDIS_URL = %s", os.environ.get("REDIS_URL", "<non défini>"))
 
     r = get_redis()
-    logger.info("REDIS URL: %s", os.environ.get("REDIS_URL", "<unknown>"))
 
+    # Au démarrage : re-enqueue les tâches bloquées dans la processing queue
+    # (laissées là par un crash précédent du worker)
     pending = r.lrange("queue_ocr_processing", 0, -1)
     if pending:
-        logger.warning("Re-enqueue %d tasks from queue_ocr_processing", len(pending))
+        logger.warning(
+            "%d tâche(s) bloquée(s) dans queue_ocr_processing → re-enqueue",
+            len(pending),
+        )
         for item in pending:
             r.lpush("queue_ocr", item)
         r.delete("queue_ocr_processing")
 
+    logger.info("En attente de tâches...")
+
     while True:
-        logger.info("⏳ Waiting for tasks...")
-        task = r.brpoplpush("queue_ocr", "queue_ocr_processing", timeout=5)
+        # blmove remplace brpoplpush, retiré dans Redis 7
+        # Déplace atomiquement : queue_ocr (droite) → queue_ocr_processing (gauche)
+        task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
 
         if not task:
-            continue
+            continue  # timeout, on reboucle
 
-        logger.info("🔥 TASK RECEIVED: %s", task)
+        logger.info("Tâche reçue : %s", task)
 
         try:
             process_task_with_retry(task.decode())
+            # Succès : retire de la processing queue
             r.lrem("queue_ocr_processing", 1, task)
+            logger.info("Tâche terminée avec succès")
+
         except Exception:
-            logger.exception("Task failed permanently, moving to dead letter queue")
+            # Échec définitif après tous les retries : dead letter queue
+            logger.exception("Tâche abandonnée → queue_ocr_dead")
             r.lpush("queue_ocr_dead", task)
             r.lrem("queue_ocr_processing", 1, task)
 

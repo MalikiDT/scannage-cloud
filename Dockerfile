@@ -1,9 +1,8 @@
-# /Dockerfile
-
+# ── Build ────────────────────────────────────────────────────────────────────
 FROM python:3.11-slim
 
-# System deps
-RUN apt-get update && apt-get install -y \
+# Dépendances système OCR
+RUN apt-get update && apt-get install -y --no-install-recommends \
     tesseract-ocr \
     tesseract-ocr-fra \
     tesseract-ocr-por \
@@ -13,13 +12,22 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
+# Dépendances Python en premier (layer mis en cache si requirements.txt inchangé)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# Code applicatif
+COPY api/        ./api/
+COPY pipeline_ocr/ ./pipeline_ocr/
 
-# dossier uploads
+# Dossier uploads (écrasé par le volume en production)
 RUN mkdir -p /app/uploads
 
-# IMPORTANT: lancer comme module
-CMD ["python", "-m", "api.worker"]
+# Utilisateur non-root (bonne pratique sécurité)
+RUN useradd --no-create-home --shell /bin/false appuser \
+    && chown -R appuser /app
+USER appuser
+
+# ── Défaut : API ──────────────────────────────────────────────────────────────
+# Le service worker surcharge ce CMD dans docker-compose.yml
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
