@@ -694,7 +694,7 @@ async function chargerDonnees() {
     dossiers = data.dossiers || [];
   } catch {
     // API non disponible : utiliser les données de démo
-    dossiers = DEMO_DOSSIERS;
+    dossiers = [];
   }
   afficher();
 }
