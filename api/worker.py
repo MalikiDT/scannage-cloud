@@ -102,19 +102,17 @@ def process_task(task_json: str):
 
 
 def run_worker():
-    print("Worker OCR démarré")
+    print("🚀 Worker OCR démarré")
 
     r = get_redis()
+    print("REDIS URL:", r)
 
     while True:
-        try:
-            task = r.brpop("queue_ocr", timeout=5)
-            if task:
-                _, data = task
-                process_task(data.decode())
-        except Exception as e:
-            print(f"[WORKER ERROR] {e}")
-            time.sleep(3)
+        print("⏳ Waiting for tasks...")
+        task = r.brpop("queue_ocr", timeout=5)
+
+        if task:
+            print("🔥 TASK RECEIVED:", task)
 
 
 if __name__ == "__main__":
