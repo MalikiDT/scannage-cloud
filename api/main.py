@@ -75,6 +75,27 @@ async def creer_dossier(request: Request):
 
     return {"dossier_id": did, "statut": "incomplet"}
 
+@app.get("/api/v1/dossiers")
+def lister_dossiers(page: int = 1):
+    db = get_db()
+    cur = db.cursor()
+
+    cur.execute(
+        """
+        SELECT * FROM dossiers
+        ORDER BY cree_le DESC
+        LIMIT 20 OFFSET %s
+        """,
+        ((page - 1) * 20,)
+    )
+
+    cols = [d[0] for d in cur.description]
+    rows = [dict(zip(cols, r)) for r in cur.fetchall()]
+
+    cur.close()
+    db.close()
+
+    return {"dossiers": rows}
 
 @app.post("/api/v1/dossiers/{dossier_id}/documents", status_code=202)
 async def uploader_document(
@@ -129,6 +150,37 @@ async def uploader_document(
 
     return {"document_id": did, "statut": "en_traitement"}
 
+@app.get("/api/v1/dossiers/{dossier_id}")
+def get_dossier(dossier_id: str):
+    db = get_db()
+    cur = db.cursor()
+
+    cur.execute("SELECT * FROM dossiers WHERE id=%s", (dossier_id,))
+    row = cur.fetchone()
+
+    if not row:
+        raise HTTPException(404, "Dossier introuvable")
+
+    cols = [d[0] for d in cur.description]
+    dossier = dict(zip(cols, row))
+
+    cur.execute(
+        """
+        SELECT id, type_document, nom_fichier, statut, score_confiance, cree_le
+        FROM documents WHERE dossier_id=%s
+        """,
+        (dossier_id,)
+    )
+
+    dossier["documents"] = [
+        dict(zip([x[0] for x in cur.description], r))
+        for r in cur.fetchall()
+    ]
+
+    cur.close()
+    db.close()
+
+    return dossier
 
 # ─── Static ──────────────────────────────────────────────
 
