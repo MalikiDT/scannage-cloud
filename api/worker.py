@@ -114,6 +114,9 @@ def run_worker():
         if task:
             print("🔥 TASK RECEIVED:", task)
 
+            # ✅ LIGNE CRITIQUE
+            process_task(task[1].decode())
+
 
 if __name__ == "__main__":
     run_worker()
