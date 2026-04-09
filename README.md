@@ -1,6 +1,7 @@
 # Scannage Cloud
 
 Application de traitement automatique de documents douaniers pour la gestion des dossiers d'importation.
+Le lien de la plateforme : [https://scannage-cloud-production.up.railway.app/]
 
 ## Architecture
 
