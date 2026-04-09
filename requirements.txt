@@ -10,4 +10,4 @@ pytesseract==0.3.13
 opencv-python-headless==4.9.0.80
 Pillow==10.3.0
 numpy==1.26.4
-boto3
+boto3==1.28.57

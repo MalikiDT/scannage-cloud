@@ -1,0 +1,397 @@
+2026-04-08T21:34:14.339139505Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:14.339147059Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:14.339151200Z [err]      run_worker()
+2026-04-08T21:34:14.339154339Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:14.339157650Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:14.339161756Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:14.339165668Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:34:14.339180584Z [err]  2026-04-08 21:34:14,132 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:14.339183245Z [err]  2026-04-08 21:34:14,133 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:14.339185874Z [err]  2026-04-08 21:34:14,177 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:14.339188604Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:14.339191283Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:15.303988344Z [inf]  Starting Container
+2026-04-08T21:34:15.434666736Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:15.434675645Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:15.434680448Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:15.434684268Z [err]      run_worker()
+2026-04-08T21:34:15.434689678Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:15.434693334Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:15.434696729Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:15.434700127Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:34:15.434764671Z [err]  2026-04-08 21:34:15,248 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:15.434768422Z [err]  2026-04-08 21:34:15,248 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:15.434771754Z [err]  2026-04-08 21:34:15,254 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:15.434775814Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:16.448110778Z [err]  2026-04-08 21:34:16,355 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:16.448114390Z [err]  2026-04-08 21:34:16,355 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:16.448119086Z [err]  2026-04-08 21:34:16,388 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:16.448122633Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:16.448125966Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:16.448128798Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:16.448131763Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:16.448135410Z [err]      run_worker()
+2026-04-08T21:34:16.448139530Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:16.448142995Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:16.448150294Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:16.448155588Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:34:17.521661729Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:34:17.521662543Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:17.521668484Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:17.521680861Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:17.521687176Z [err]      run_worker()
+2026-04-08T21:34:17.521691751Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:17.521694849Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:17.521700477Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:17.521702962Z [err]  2026-04-08 21:34:17,384 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:17.521710884Z [err]  2026-04-08 21:34:17,384 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:17.521713556Z [err]  2026-04-08 21:34:17,390 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:17.521720602Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:18.503638601Z [err]  2026-04-08 21:34:18,456 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:18.503660247Z [err]  2026-04-08 21:34:18,489 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:18.503664265Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:18.503667616Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:18.503671021Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:18.503678051Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:18.503681782Z [err]      run_worker()
+2026-04-08T21:34:18.503684909Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:18.503688359Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:18.503692052Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:18.503694995Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:34:18.503700491Z [err]  2026-04-08 21:34:18,456 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:19.592687715Z [err]  2026-04-08 21:34:19,586 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:19.592693489Z [err]  2026-04-08 21:34:19,586 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:19.594269732Z [err]  2026-04-08 21:34:19,593 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:19.594273618Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:19.594276580Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:19.594279951Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:19.594282736Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:19.594285404Z [err]      run_worker()
+2026-04-08T21:34:19.594288176Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:19.594291470Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:19.594294759Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:19.594297415Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:34:20.745585927Z [err]  2026-04-08 21:34:20,700 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:20.745591097Z [err]  2026-04-08 21:34:20,700 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:20.745594521Z [err]  2026-04-08 21:34:20,732 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:20.745599580Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:20.745602472Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:20.745605578Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:20.745608646Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:20.745611395Z [err]      run_worker()
+2026-04-08T21:34:20.745614016Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:20.745616734Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:20.745619878Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:20.745622646Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:34:21.818585741Z [err]  2026-04-08 21:34:21,816 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:21.818591260Z [err]  2026-04-08 21:34:21,816 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:21.827206669Z [err]  2026-04-08 21:34:21,825 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:21.827211609Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:21.827215705Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:21.827219581Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:21.827223335Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:21.827226450Z [err]      run_worker()
+2026-04-08T21:34:21.827229482Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:21.827233475Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:21.827237467Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:21.827241852Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:34:22.879550916Z [err]  2026-04-08 21:34:22,873 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:22.879554574Z [err]  2026-04-08 21:34:22,873 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:22.923194771Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:22.923203451Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:34:22.923218800Z [err]  2026-04-08 21:34:22,906 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:22.923222604Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:22.923226667Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:22.923231177Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:22.923234413Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:22.923237435Z [err]      run_worker()
+2026-04-08T21:34:22.923240882Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:22.923245186Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:24.022072327Z [err]  2026-04-08 21:34:24,021 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:24.022077035Z [err]  2026-04-08 21:34:24,021 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:24.029203072Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:24.029210267Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:24.029214555Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:34:24.029240357Z [err]  2026-04-08 21:34:24,027 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:24.029244110Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:24.029247323Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:24.029250555Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:24.029255398Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:24.029259065Z [err]      run_worker()
+2026-04-08T21:34:24.029262322Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:25.082255424Z [err]  2026-04-08 21:34:25,079 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:34:25.082260632Z [err]  2026-04-08 21:34:25,079 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:34:25.121130011Z [err]  2026-04-08 21:34:25,116 [INFO] worker: En attente de tâches...
+2026-04-08T21:34:25.121134367Z [err]  Traceback (most recent call last):
+2026-04-08T21:34:25.121137460Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:34:25.121140626Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:34:25.121143650Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:34:25.121146742Z [err]      run_worker()
+2026-04-08T21:34:25.121149773Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:34:25.121153017Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:34:25.121155769Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:34:25.121158706Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:16.120045220Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:16.120052884Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:16.120056713Z [err]      run_worker()
+2026-04-08T21:36:16.120061136Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:16.120065295Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:16.120069311Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:16.120073271Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:16.120171255Z [err]  2026-04-08 21:36:15,749 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:16.120174305Z [err]  2026-04-08 21:36:15,749 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:16.120177353Z [err]  2026-04-08 21:36:15,783 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:16.120180744Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:16.120184217Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:17.121472771Z [err]      run_worker()
+2026-04-08T21:36:17.121480460Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:17.121485739Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:17.121491275Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:17.121494784Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:17.121522983Z [err]  2026-04-08 21:36:16,871 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:17.121525559Z [err]  2026-04-08 21:36:16,871 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:17.121528339Z [err]  2026-04-08 21:36:16,877 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:17.121531138Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:17.121534053Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:17.121537216Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:17.121540863Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:18.127087911Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:18.127101175Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:18.127105527Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:18.127111525Z [err]      run_worker()
+2026-04-08T21:36:18.127111641Z [err]  2026-04-08 21:36:17,994 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:18.127116978Z [err]  2026-04-08 21:36:17,994 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:18.127117193Z [err]  2026-04-08 21:36:18,026 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:18.127121808Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:18.127126746Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:18.127127407Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:18.127131548Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:18.127133397Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:19.133546964Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:19.133554857Z [err]      run_worker()
+2026-04-08T21:36:19.133559194Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:19.133563245Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:19.133567036Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:19.133571026Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:19.134223068Z [err]  2026-04-08 21:36:19,087 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:19.134225731Z [err]  2026-04-08 21:36:19,088 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:19.134228381Z [err]  2026-04-08 21:36:19,093 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:19.134231168Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:19.134233938Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:19.134236597Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:20.150021662Z [err]  2026-04-08 21:36:20,125 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:20.150026873Z [err]  2026-04-08 21:36:20,126 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:20.161668947Z [err]  2026-04-08 21:36:20,158 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:20.161672784Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:20.161676490Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:20.161680421Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:20.161684401Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:20.161688544Z [err]      run_worker()
+2026-04-08T21:36:20.161692323Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:20.161696685Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:20.161700635Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:20.161704456Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:21.243363866Z [err]  2026-04-08 21:36:21,241 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:21.243369296Z [err]  2026-04-08 21:36:21,241 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:21.249187098Z [err]  2026-04-08 21:36:21,247 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:21.249193181Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:21.249196910Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:21.249200883Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:21.249205033Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:21.249209273Z [err]      run_worker()
+2026-04-08T21:36:21.249213420Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:21.249218679Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:21.249222930Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:21.249227794Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:22.333402630Z [err]  2026-04-08 21:36:22,332 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:22.333406108Z [err]  2026-04-08 21:36:22,332 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:22.366403930Z [err]  2026-04-08 21:36:22,364 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:22.366407310Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:22.366410090Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:22.366413672Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:22.366416415Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:22.366419827Z [err]      run_worker()
+2026-04-08T21:36:22.366422665Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:22.366425584Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:22.366428082Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:22.366430574Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:23.529166736Z [err]  2026-04-08 21:36:23,525 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:23.529170487Z [err]  2026-04-08 21:36:23,525 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:23.535531581Z [err]  2026-04-08 21:36:23,532 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:23.535539349Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:23.535544460Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:23.535549664Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:23.535554721Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:23.535559385Z [err]      run_worker()
+2026-04-08T21:36:23.535565381Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:23.535569725Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:23.535573557Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:23.535577494Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:24.632477394Z [err]  2026-04-08 21:36:24,604 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:24.632480083Z [err]  2026-04-08 21:36:24,604 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:24.639397473Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:24.639403714Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:24.639408329Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:24.639421547Z [err]  2026-04-08 21:36:24,638 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:24.639427030Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:24.639432082Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:24.639437531Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:24.639443296Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:24.639448848Z [err]      run_worker()
+2026-04-08T21:36:24.639454380Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:25.691923335Z [err]  2026-04-08 21:36:25,686 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:25.691926168Z [err]  2026-04-08 21:36:25,686 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:25.699233885Z [err]  2026-04-08 21:36:25,693 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:25.699238305Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:25.699241535Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:25.699244428Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:25.699247355Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:25.699250052Z [err]      run_worker()
+2026-04-08T21:36:25.699252637Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:25.699255448Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:25.699258197Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:25.699261082Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:27.176406862Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:27.176430820Z [err]  2026-04-08 21:36:26,789 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:27.176439621Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:27.176444128Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:27.176450919Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:27.176456295Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:27.176461787Z [err]      run_worker()
+2026-04-08T21:36:27.176466941Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:27.176470728Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:27.176474187Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:27.176476916Z [err]  2026-04-08 21:36:26,756 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:27.176480702Z [err]  2026-04-08 21:36:26,756 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:46.948597911Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:46.948605364Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:46.948608420Z [err]  2026-04-08 21:36:41,000 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:46.948611003Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:46.948613525Z [err]  2026-04-08 21:36:41,000 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:46.948617487Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:46.948619090Z [err]  2026-04-08 21:36:41,034 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:46.948624022Z [err]  2026-04-08 21:36:42,060 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:46.948624088Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:46.948629432Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:46.948630779Z [err]  2026-04-08 21:36:42,061 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:46.948633804Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:46.948638026Z [err]  2026-04-08 21:36:42,066 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:46.948638237Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:46.948644263Z [err]      run_worker()
+2026-04-08T21:36:46.948644477Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:46.948649241Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:46.948652854Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:46.948656416Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:46.950189750Z [err]  2026-04-08 21:36:44,328 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:46.950190742Z [err]      run_worker()
+2026-04-08T21:36:46.950196002Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:46.950199517Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:46.950202173Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:46.950205251Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:46.950208124Z [err]  2026-04-08 21:36:43,137 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:46.950210943Z [err]  2026-04-08 21:36:43,137 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:46.950213617Z [err]  2026-04-08 21:36:43,183 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:46.950216363Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:46.950219448Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:46.950222287Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:46.950225505Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:46.950228251Z [err]      run_worker()
+2026-04-08T21:36:46.950230966Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:46.950233746Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:46.950236253Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:46.950238992Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:46.950241744Z [err]  2026-04-08 21:36:44,328 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:46.951982067Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:46.951989286Z [err]  2026-04-08 21:36:44,334 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:46.951994158Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:46.951997484Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:46.952000853Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:46.952003711Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:46.952007242Z [err]      run_worker()
+2026-04-08T21:36:46.952010321Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:46.952013746Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:46.952016907Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:46.952019881Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:46.952022740Z [err]  2026-04-08 21:36:45,470 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:46.952025569Z [err]  2026-04-08 21:36:45,470 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:46.952028494Z [err]  2026-04-08 21:36:45,587 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:46.952031478Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:46.952034238Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:46.952037092Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:46.952040045Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:46.952042845Z [err]      run_worker()
+2026-04-08T21:36:46.952045491Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:46.953796752Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:46.953800147Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:46.953803464Z [err]  2026-04-08 21:36:46,878 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:46.953806184Z [err]  2026-04-08 21:36:46,878 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:46.953809363Z [err]  2026-04-08 21:36:46,884 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:46.953812438Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:46.953815407Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:46.953818227Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:46.953821005Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:46.953824899Z [err]      run_worker()
+2026-04-08T21:36:46.953827836Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:46.953830462Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:46.953833327Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:46.953835927Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:48.529964699Z [err]  2026-04-08 21:36:48,138 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:48.529972041Z [err]  2026-04-08 21:36:48,177 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:48.529978219Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:48.529983237Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:48.529985796Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:48.529987986Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:48.529989431Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:48.529998408Z [err]      run_worker()
+2026-04-08T21:36:48.529999413Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:48.530005776Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:48.530011556Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:48.530035138Z [err]  2026-04-08 21:36:48,138 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:49.551152176Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:49.551155214Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:49.551158522Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:49.551161884Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:49.551165878Z [err]      run_worker()
+2026-04-08T21:36:49.551169537Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:49.551173924Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:49.551178321Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:49.551200911Z [err]  2026-04-08 21:36:49,249 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:49.551204863Z [err]  2026-04-08 21:36:49,249 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:49.551208964Z [err]  2026-04-08 21:36:49,255 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:49.551212888Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:50.572013678Z [err]  2026-04-08 21:36:50,319 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:50.572017240Z [err]  2026-04-08 21:36:50,319 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:50.572025728Z [err]  2026-04-08 21:36:50,357 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:50.572030426Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:50.572034691Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:50.572037769Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:50.572040666Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:50.572043753Z [err]      run_worker()
+2026-04-08T21:36:50.572047352Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:50.572050740Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:50.572054006Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:50.572057640Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:51.671144491Z [err]  2026-04-08 21:36:51,397 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:51.671145747Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:51.671151639Z [err]  2026-04-08 21:36:51,403 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:51.671154357Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:51.671159292Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:51.671160509Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'
+2026-04-08T21:36:51.671164861Z [err]      run_worker()
+2026-04-08T21:36:51.671173226Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:51.671181132Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:51.671185993Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:51.671187810Z [err]  2026-04-08 21:36:51,397 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:51.671190827Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:52.623314376Z [err]  2026-04-08 21:36:52,525 [INFO] worker: Worker OCR démarré (PID 1)
+2026-04-08T21:36:52.623317984Z [err]  2026-04-08 21:36:52,525 [INFO] worker: REDIS_URL = redis://default:taiUKDShlAPijNSgYXdLdgaJBXrJCVRz@redis.railway.internal:6379
+2026-04-08T21:36:52.623321199Z [err]  2026-04-08 21:36:52,560 [INFO] worker: En attente de tâches...
+2026-04-08T21:36:52.623325035Z [err]  Traceback (most recent call last):
+2026-04-08T21:36:52.623328225Z [err]    File "<frozen runpy>", line 198, in _run_module_as_main
+2026-04-08T21:36:52.623331566Z [err]    File "<frozen runpy>", line 88, in _run_code
+2026-04-08T21:36:52.623349548Z [err]    File "/app/api/worker.py", line 188, in <module>
+2026-04-08T21:36:52.623354681Z [err]      run_worker()
+2026-04-08T21:36:52.623358713Z [err]    File "/app/api/worker.py", line 167, in run_worker
+2026-04-08T21:36:52.623364751Z [err]      task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
+2026-04-08T21:36:52.623365061Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-08T21:36:52.623373867Z [err]  TypeError: BasicKeyCommands.blmove() got multiple values for argument 'timeout'

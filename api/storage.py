@@ -87,7 +87,6 @@ def download_storage_object(object_key: str, target_path: str) -> str:
 
     return target_path
 
-
 def download_to_tempfile(object_key: str) -> str:
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
     tmp.close()
