@@ -3,10 +3,12 @@
 import json
 import logging
 import os
+import tempfile
 import time
 
 from pipeline_ocr.pipeline import process_document
 from api.database import get_db, get_redis
+from api.storage import STORAGE_ENABLED, download_to_tempfile
 
 logging.basicConfig(
     level=logging.INFO,
@@ -60,6 +62,15 @@ def mark_error(document_id: str):
 
 # ─── Traitement ───────────────────────────────────────────────────────────────
 
+def _get_pdf_path(task: dict) -> tuple[str, bool]:
+    if STORAGE_ENABLED and task.get("storage_key"):
+        temp_path = download_to_tempfile(task["storage_key"])
+        return temp_path, True
+
+    # Compatibilité avec d'anciennes tâches stockées en chemin local
+    return task["chemin"], False
+
+
 def process_task(task_json: str):
     """
     Traite une tâche OCR du début à la fin.
@@ -70,13 +81,20 @@ def process_task(task_json: str):
     task = json.loads(task_json)
     doc_id     = task["document_id"]
     dossier_id = task["dossier_id"]
-    path       = task["chemin"]
     doc_type   = task["type_document"]
+
+    pdf_path, cleanup = _get_pdf_path(task)
 
     logger.info("Début traitement document=%s dossier=%s", doc_id, dossier_id)
 
-    # Peut lever une exception — laissée remonter intentionnellement
-    result = process_document(path, doc_type)
+    try:
+        result = process_document(pdf_path, doc_type)
+    finally:
+        if cleanup and os.path.exists(pdf_path):
+            try:
+                os.remove(pdf_path)
+            except OSError:
+                logger.warning("Impossible de supprimer le fichier temporaire %s", pdf_path)
 
     statut = "erreur" if result.get("erreur") else "traite"
     logger.info(

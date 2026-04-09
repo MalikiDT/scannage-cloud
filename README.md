@@ -48,6 +48,12 @@ Dockerfile           # Image de production
 # Variables d'environnement
 export DATABASE_URL="postgresql://user:pass@localhost:5432/scannage"
 export REDIS_URL="redis://localhost:6379"
+# Stockage objet (optionnel localement, requis en production)
+export STORAGE_ENDPOINT="<endpoint>"
+export STORAGE_ACCESS_KEY="<access-key>"
+export STORAGE_SECRET_KEY="<secret-key>"
+export STORAGE_BUCKET="<bucket-name>"
+export STORAGE_SECURE="true"
 
 # Installation
 pip install -r requirements.txt

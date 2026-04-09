@@ -11,6 +11,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
 from api.database import get_db, get_redis, ensure_upload_dir, UPLOAD_DIR
+from api.storage import (
+    STORAGE_ENABLED,
+    get_object_key,
+    upload_file_to_storage,
+)
 
 MAX_UPLOAD_SIZE = 50 * 1024 * 1024  # 50 Mo
 
@@ -212,12 +217,16 @@ async def uploader_document(
 
     did   = str(uuid.uuid4())
     ext   = os.path.splitext(fichier.filename)[1] or ".pdf"
-    sd    = os.path.join(UPLOAD_DIR, datetime.now().strftime("%Y/%m"))
-    os.makedirs(sd, exist_ok=True)
-    chemin = os.path.join(sd, f"{did}{ext}")
+    object_key = get_object_key(ext)
+    chemin = object_key if STORAGE_ENABLED else os.path.join(UPLOAD_DIR, datetime.now().strftime("%Y/%m"), f"{did}{ext}")
 
     try:
-        await save_upload_file(fichier, chemin)
+        if STORAGE_ENABLED:
+            upload_file_to_storage(fichier, object_key)
+        else:
+            sd = os.path.dirname(chemin)
+            os.makedirs(sd, exist_ok=True)
+            await save_upload_file(fichier, chemin)
 
         with get_db() as db:
             cur = db.cursor()
@@ -239,21 +248,23 @@ async def uploader_document(
             )
 
             # lpush dans le même bloc : si Redis plante, le rollback DB est déclenché
-            get_redis().lpush(
-                "queue_ocr",
-                json.dumps({
-                    "document_id":  did,
-                    "dossier_id":   dossier_id,
-                    "chemin":       chemin,
-                    "type_document": type_document,
-                    "nom_fichier":  fichier.filename,
-                }),
-            )
+            payload = {
+                "document_id":  did,
+                "dossier_id":   dossier_id,
+                "type_document": type_document,
+                "nom_fichier":  fichier.filename,
+            }
+            if STORAGE_ENABLED:
+                payload["storage_key"] = object_key
+            else:
+                payload["chemin"] = chemin
+
+            get_redis().lpush("queue_ocr", json.dumps(payload))
 
     except HTTPException:
         raise
     except Exception as exc:
-        if os.path.exists(chemin):
+        if not STORAGE_ENABLED and os.path.exists(chemin):
             try:
                 os.remove(chemin)
             except OSError:
