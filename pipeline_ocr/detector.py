@@ -1,4 +1,4 @@
-# api/detector.py
+pipeline_ocr/detector.py
 
 import pdfplumber
 
