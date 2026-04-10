@@ -25,6 +25,8 @@ def get_storage_client() -> Minio:
         access_key=STORAGE_ACCESS_KEY,
         secret_key=STORAGE_SECRET_KEY,
         secure=STORAGE_SECURE,
+        http_client=None,
+        region="auto",
     )
 
 
