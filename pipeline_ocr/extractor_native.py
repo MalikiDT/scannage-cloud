@@ -1,3 +1,5 @@
+# pipeline_ocr/detector.py
+
 import pdfplumber
 
 def extract_text_native(pdf_path: str) -> dict:
