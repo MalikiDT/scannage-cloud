@@ -46,6 +46,10 @@ def update_dossier(cur, dossier_id: str, data: dict):
         logger.info("Dossier %s → complet", dossier_id)
     else:
         missing = [f for f, v in zip(fields, row or []) if not v]
+        cur.execute(
+        "UPDATE dossiers SET statut = 'incomplet', mis_a_jour_le = NOW() WHERE id = %s",
+        (dossier_id,)
+        )
         logger.info("Dossier %s → incomplet (manquants : %s)", dossier_id, missing)
 
 
@@ -182,7 +186,7 @@ def run_worker():
     while True:
         # blmove remplace brpoplpush, retiré dans Redis 7
         # Déplace atomiquement : queue_ocr (droite) → queue_ocr_processing (gauche)
-        task = r.blmove("queue_ocr", "queue_ocr_processing", 5, "RIGHT", "LEFT")
+        task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", timeout=5)
 
         if not task:
             continue  # timeout, on reboucle
