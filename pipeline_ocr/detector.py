@@ -2,7 +2,7 @@
 
 import pdfplumber
 
-def is_native_pdf(pdf_path: str, min_chars: int = 50) -> bool:
+def is_native_pdf(pdf_path: str, min_chars: int = 20) -> bool:
     """
     Retourne True si le PDF contient du texte sélectionnable (PDF natif).
     Retourne False si c'est un scan (image sans texte extractible).
