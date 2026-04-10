@@ -127,7 +127,7 @@ def extract_numero_declaration(text: str) -> Optional[str]:
         if not re.search(r"Manifeste|Sommier", prefix, re.IGNORECASE):
             return f"{m.group(1)} {m.group(2)} {m.group(3)}"
 
-    # Passe 3 — reconstruction depuis 3 sources indépendantes
+    # p 3 — reconstruction depuis 3 sources indépendantes
     # (cas des cases de formulaire très corrompues par Tesseract)
     bureau_m = re.search(r"Bureau\s+\w+\s+(\d{2}[A-Z])", text, re.IGNORECASE)
     label_m  = re.search(r"d.claration", text, re.IGNORECASE)

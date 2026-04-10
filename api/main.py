@@ -275,6 +275,26 @@ async def uploader_document(
     logger.info("Document %s uploadé pour dossier %s (type=%s)", did, dossier_id, type_document)
     return {"document_id": did, "statut": "en_traitement"}
 
+@app.get("/health")
+def health():
+    try:
+        with get_db() as db:
+            cur = db.cursor()
+            cur.execute("SELECT 1")
+            cur.fetchone()
+    except Exception as exc:
+        raise HTTPException(503, "Base de données inaccessible") from exc
+
+    try:
+        r = get_redis()
+        r.ping()
+    except Exception as exc:
+        raise HTTPException(503, "Redis inaccessible") from exc
+
+    return {
+        "status": "ok",
+        "storage_enabled": STORAGE_ENABLED,
+    }
 
 # ─── Static ───────────────────────────────────────────────
 

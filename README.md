@@ -45,23 +45,39 @@ Dockerfile           # Image de production
 
 ### Démarrage rapide
 ```bash
-# Variables d'environnement
-export DATABASE_URL="postgresql://user:pass@localhost:5432/scannage"
-export REDIS_URL="redis://localhost:6379"
-# Stockage objet (optionnel localement, requis en production)
-export STORAGE_ENDPOINT="<endpoint>"
-export STORAGE_ACCESS_KEY="<access-key>"
-export STORAGE_SECRET_KEY="<secret-key>"
-export STORAGE_BUCKET="<bucket-name>"
-export STORAGE_SECURE="true"
-
 # Installation
 pip install -r requirements.txt
 
-# Démarrage
 docker-compose up -d
+```
+
+### En local avec MinIO
+La configuration Docker locale inclut un service MinIO. Les variables d'environnement sont déjà injectées dans `docker-compose.yml` pour l'API et le worker.
+
+- MinIO console : http://localhost:9001
+- MinIO API : http://localhost:9000
+
+### Variables d'environnement manuelles
+Si vous exécutez l'API ou le worker sans Docker :
+```bash
+export DATABASE_URL="postgresql://user:pass@localhost:5432/scannage"
+export REDIS_URL="redis://localhost:6379"
+export STORAGE_ENDPOINT="http://localhost:9000"
+export STORAGE_ACCESS_KEY="scannage_admin"
+export STORAGE_SECRET_KEY="changez_ce_mot_de_passe"
+export STORAGE_BUCKET="scannage-cloud"
+export STORAGE_SECURE="false"
+```
+
+### Démarrage
+```bash
 python api/main.py
 python api/worker.py
+```
+
+### Vérification
+```bash
+curl http://localhost:8000/health
 ```
 
 ## API
