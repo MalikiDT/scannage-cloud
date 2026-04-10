@@ -93,6 +93,8 @@ def process_task(task_json: str):
 
     try:
         result = process_document(pdf_path, doc_type)
+        # DEBUG temporaire — à supprimer après diagnostic
+        logger.info("TEXTE EXTRAIT:\n%s", "\n".join(result.get("pages", {}).values())[:2000])
     finally:
         if cleanup and os.path.exists(pdf_path):
             try:
