@@ -184,7 +184,7 @@ def run_worker():
     logger.info("En attente de tâches...")
 
     while True:
-        # blmove remplace brpoplpush, retiré dans Redis 7
+       # brpoplpush : compatible Redis 6.0+ (Railway)
         # Déplace atomiquement : queue_ocr (droite) → queue_ocr_processing (gauche)
         task = r.brpoplpush("queue_ocr", "queue_ocr_processing", timeout=5)
 
