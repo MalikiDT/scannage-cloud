@@ -186,7 +186,7 @@ def run_worker():
     while True:
         # blmove remplace brpoplpush, retiré dans Redis 7
         # Déplace atomiquement : queue_ocr (droite) → queue_ocr_processing (gauche)
-        task = r.blmove("queue_ocr", "queue_ocr_processing", "RIGHT", "LEFT", 5)
+        task = r.brpoplpush("queue_ocr", "queue_ocr_processing", timeout=5)
 
         if not task:
             continue  # timeout, on reboucle
