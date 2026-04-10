@@ -1,3 +1,5 @@
+# pipeline_ocr/pipeline.py
+
 from pipeline_ocr.detector import is_native_pdf
 from pipeline_ocr.extractor_native import extract_text_native
 from pipeline_ocr.extractor_scan import extract_text_scan
