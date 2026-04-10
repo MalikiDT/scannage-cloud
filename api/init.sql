@@ -1,3 +1,5 @@
+# api/init.sql
+
 -- Création des tables au premier démarrage
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
