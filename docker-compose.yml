@@ -5,15 +5,15 @@ version: "3.9"
 # ── Variables partagées ───────────────────────────────────────────────────────
 # Centralise les valeurs répétées entre api et worker.
 # En production, remplacez ces valeurs par des secrets (Railway Variables, etc.)
-x-db-env: &db-env
-  DATABASE_URL: postgresql://scannage_user:changez_ce_mot_de_passe@postgres:5432/scannage
+# x-db-env: &db-env
+#   DATABASE_URL: postgresql://scannage_user:changez_ce_mot_de_passe@postgres:5432/scannage
 
-x-redis-env: &redis-env
-  REDIS_URL: redis://redis:6379
+# x-redis-env: &redis-env
+#   REDIS_URL: redis://redis:6379
 
 x-app-env: &app-env
-  <<: *db-env
-  <<: *redis-env
+  DATABASE_URL: postgresql://scannage_user:changez_ce_mot_de_passe@postgres:5432/scannage
+  REDIS_URL: redis://redis:6379
   UPLOAD_DIR: /app/uploads
 
 services:
@@ -29,7 +29,7 @@ services:
       POSTGRES_PASSWORD: changez_ce_mot_de_passe
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./api/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
       - "5432:5432"
     healthcheck:
