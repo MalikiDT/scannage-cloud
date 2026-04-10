@@ -1,3 +1,5 @@
+# api/detector.py
+
 import pdfplumber
 
 def is_native_pdf(pdf_path: str, min_chars: int = 50) -> bool:
